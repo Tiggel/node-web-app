@@ -1,0 +1,8 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: build
+  namespace: node-web-project
+spec:
+  pipelineRef:
+    name: node-web-app-pipeline
