@@ -3,6 +3,8 @@ kind: Pipeline
 metadata:
   name: node-web-app-pipeline
   namespace: node-web-project
+  labels:
+    app: node
 spec:
   resources:
     - name: node-web-app-source
