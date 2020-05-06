@@ -23,10 +23,10 @@ spec:
       resources:
         inputs:
           - name: source
-            resource: node-web-app-source
+            resource: node-web-app-git
         outputs:
           - name: image
-            resource: node-web-app-image
+            resource: node-web-app-img
       taskRef:
         kind: ClusterTask
         name: buildah
