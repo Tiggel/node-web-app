@@ -5,9 +5,11 @@ metadata:
   namespace: node-web-project
 spec:
   resources:
-    - name: node-web-app-source
-      type: git
-    - name: node-web-app-image
-      type: image
+    - name: node-web-app-git
+      resourceRef:
+        name: node-web-app-source
+    - name: node-web-app-img
+      resourceRef:
+        name: node-web-app-image
   pipelineRef:
     name: node-web-app-pipeline

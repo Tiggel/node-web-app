@@ -7,9 +7,9 @@ metadata:
     app: node
 spec:
   resources:
-    - name: node-web-app-source
+    - name: node-web-app-git
       type: git
-    - name: node-web-app-image
+    - name: node-web-app-img
       type: image
   tasks:
     - name: build-and-publish-image
