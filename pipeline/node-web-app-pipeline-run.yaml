@@ -4,5 +4,10 @@ metadata:
   name: build
   namespace: node-web-project
 spec:
+  resources:
+    - name: node-web-app-source
+      type: git
+    - name: node-web-app-image
+      type: image
   pipelineRef:
     name: node-web-app-pipeline
