@@ -34,11 +34,10 @@ spec:
           value: node-web-app
         - name: flags
           value: '--insecure'
-       - name: argocd-version
+        - name: argocd-version
           value: v1.5.2
       runAfter:
         - build-and-publish-image
       taskRef:
         kind: Task
         name: argocd-task-sync-and-wait
-    
