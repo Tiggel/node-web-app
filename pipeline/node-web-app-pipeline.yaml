@@ -5,6 +5,7 @@ metadata:
   namespace: node-web-project
   labels:
     app: node
+    component: tekton
 spec:
   resources:
     - name: node-web-app-git

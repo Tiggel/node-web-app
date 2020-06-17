@@ -6,9 +6,9 @@ metadata:
 spec:
   params:
     - name: url
-      value: 'https://github.com/Tiggel/node-web-app.git'
+      value: 'https://gitlab.consol.de/sebastiant/tekton-webinar.git'
     - name: revision
-      value: master
+      value: tekton-k8s
   type: git
 ---
 apiVersion: tekton.dev/v1alpha1
@@ -19,5 +19,5 @@ metadata:
 spec:
   params:
     - name: url
-      value: 'image-registry.openshift-image-registry.svc:5000/node-web-project/web-node-app:latest'
+      value: 'tiggel/node-web-demo:latest'
   type: image
