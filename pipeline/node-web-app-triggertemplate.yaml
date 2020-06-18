@@ -28,9 +28,9 @@ metadata:
 spec:
   params:
     - name: git-repo-url
-      value: https://gitlab.consol.de/sebastiant/tekton-webinar.git
+      value: https://github.com/Tiggel/node-web-app.git
     - name: git-revision
-      value: tekton-k8s
+      value: master
     - name: git-repo-name
       value: tekton-webinar
 ---
