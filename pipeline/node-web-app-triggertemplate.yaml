@@ -19,7 +19,7 @@ spec:
           - name: node-web-app-img
             resourceRef:
               name: node-web-app-image
-        serviceAccountName: pipeline
+        #serviceAccountName: pipeline
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
