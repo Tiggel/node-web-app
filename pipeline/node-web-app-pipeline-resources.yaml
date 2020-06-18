@@ -6,7 +6,7 @@ metadata:
 spec:
   params:
     - name: url
-      value: 'https://gitlab.consol.de/sebastiant/tekton-webinar.git'
+      value: 'https://github.com/Tiggel/node-web-app.git'
     - name: revision
       value: master
   type: git
