@@ -19,5 +19,5 @@ metadata:
 spec:
   params:
     - name: url
-      value: 'https://index.docker.io/v1/tiggel/node-web-demo:latest'
+      value: 'tiggel/node-web-demo:latest'
   type: image
