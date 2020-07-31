@@ -48,10 +48,11 @@ spec:
   #serviceAccountName: pipeline
   triggers:
     - bindings:
-        - name: node-web-app-tb
+        name: node-web-app-tb
+        spec:
+          params:
+            - name: deployment_environment
+              value: dev
       template:
         name: node-web-app-tt
-      params:
-      - name: deployment_environment
-        value: dev
   serviceType: LoadBalancer
