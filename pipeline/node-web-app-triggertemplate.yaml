@@ -4,8 +4,7 @@ metadata:
   name: node-web-app-tt
 spec:
   params:
-    - name: deployment_environment
-      type: string
+    - name: environment
   resourcetemplates:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
@@ -17,7 +16,7 @@ spec:
           name: node-web-app-pipeline
         params:
           - name: deployment_environment
-            value: $(params.deployment_environment)
+            value: $(params.environment)
         resources:
           - name: node-web-app-git
             resourceRef:
@@ -39,6 +38,8 @@ spec:
       value: master
     - name: git-repo-name
       value: tekton-webinar
+    - name: environment
+      value: dev
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
@@ -47,12 +48,9 @@ metadata:
 spec:
   #serviceAccountName: pipeline
   triggers:
-    - bindings:
-        name: node-web-app-tb
-        spec:
-          params:
-            - name: deployment_environment
-              value: dev
+    - name: trigger-argo
+      bindings:
+        - ref: node-web-app-tb
       template:
         name: node-web-app-tt
   serviceType: LoadBalancer
