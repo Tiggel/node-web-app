@@ -7,6 +7,10 @@ metadata:
     app: node
     component: tekton
 spec:
+  params:
+    - name: deployment_environment
+      description: the environment to deploy to with argocd, which is the argocd application to use
+      default: dev
   resources:
     - name: node-web-app-git
       type: git
@@ -34,7 +38,7 @@ spec:
     - name: argocd-sync-deployment
       params:
         - name: application-name
-          value: deployment
+          value: $(params.deployment_environment)
         - name: flags
           value: '--insecure'
         - name: argocd-version
