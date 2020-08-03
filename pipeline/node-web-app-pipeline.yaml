@@ -8,9 +8,9 @@ metadata:
     component: tekton
 spec:
   params:
-    - name: git-url
-    - name: git-revision
-    - name: image-name
+    - name: url
+    - name: revision
+    - name: image
     - name: deployment_environment
     - name: path-to-docker-file
   workspaces:
@@ -21,9 +21,9 @@ spec:
         name: git-clone
       params:
         - name: url
-          value: $(params.git-url)
+          value: $(params.url)
         - name: revision
-          value: $(params.git-revision)
+          value: $(params.revision)
       workspaces:
         - name: output
           workspace: git-source
@@ -32,7 +32,7 @@ spec:
         name: kaniko
       params:
         - name: IMAGE
-          value: $(params.image-name)
+          value: $(params.image)
         - name: DOCKERFILE
           value: $(params.path-to-docker-file)
       workspaces:

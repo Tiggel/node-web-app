@@ -5,8 +5,11 @@ metadata:
 spec:
   params:
     - name: environment
-    - name: git-url
+      description: argocd app
+    - name: url
+      description: git url
     - name: revision
+      description: git revision
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -16,6 +19,17 @@ spec:
       spec:
         pipelineRef:
           name: node-web-app-pipeline
+        params:
+          - name: deployment_environment
+            value: $(params.environment)
+          - name: url
+            value: $(params.url)
+          - name: revision
+            value: $(params.revision)
+          - name: image
+            value: tiggel/node-web-demo:0.1
+          - name: path-to-docker-file
+            value: /workspace/source/Dockerfile
         workspaces:
           - name: git-source # this workspace name must be declared in the Pipeline
             volumeClaimTemplate:
@@ -25,17 +39,6 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
-        params:
-          - name: deployment_environment
-            value: $(params.environment)
-          - name: git-url
-            value: $(params.git-url)
-          - name: git-revision
-            value: master
-          - name: image-name
-            value: tiggel/node-web-demo:0.1
-          - name: path-to-docker-file
-            value: /workspace/source/Dockerfile
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -43,7 +46,7 @@ metadata:
   name: node-web-app-tb
 spec:
   params:
-    - name: git-url
+    - name: url
       value: https://github.com/Tiggel/node-web-app.git
     - name: revision
       value: master
