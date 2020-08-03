@@ -5,8 +5,10 @@ metadata:
 spec:
   params:
     - name: environment
+    - name: git-url
+    - name: revision
   resourcetemplates:
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         generateName: node-web-app-pipeline-run-
@@ -14,17 +16,26 @@ spec:
       spec:
         pipelineRef:
           name: node-web-app-pipeline
+        workspaces:
+          - name: git-source # this workspace name must be declared in the Pipeline
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce # access mode may affect how you can use this volume in parallel tasks
+                resources:
+                  requests:
+                    storage: 1Gi
         params:
           - name: deployment_environment
             value: $(params.environment)
-        resources:
-          - name: node-web-app-git
-            resourceRef:
-              name: node-web-app-source
-          - name: node-web-app-img
-            resourceRef:
-              name: node-web-app-image
-        #serviceAccountName: pipeline
+          - name: git-url
+            value: https://github.com/Tiggel/node-web-app.git
+          - name: git-revision
+            value: master
+          - name: image-name
+            value: tiggel/node-web-demo:0.1
+          - name: path-to-docker-file
+            value: /workspace/source/Dockerfile
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -32,12 +43,10 @@ metadata:
   name: node-web-app-tb
 spec:
   params:
-    - name: git-repo-url
+    - name: git-url
       value: https://github.com/Tiggel/node-web-app.git
-    - name: git-revision
+    - name: revision
       value: master
-    - name: git-repo-name
-      value: tekton-webinar
     - name: environment
       value: dev
 ---

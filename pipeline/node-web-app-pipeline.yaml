@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: node-web-app-pipeline
@@ -8,35 +8,36 @@ metadata:
     component: tekton
 spec:
   params:
+    - name: git-url
+    - name: git-revision
+    - name: image-name
     - name: deployment_environment
-      description: the environment to deploy to with argocd, which is the argocd application to use
-      default: dev
-  resources:
-    - name: node-web-app-git
-      type: git
-    - name: node-web-app-img
-      type: image
+    - name: path-to-docker-file
+  workspaces:
+    - name: git-source
   tasks:
-    - name: build-and-publish-image
-      params:
-        - name: BUILDER_IMAGE
-          value: 'quay.io/buildah/stable:v1.11.0'
-        - name: DOCKERFILE
-          value: ./Dockerfile
-        - name: TLSVERIFY
-          value: 'false'
-        - name: IMAGE
-          value: $(node-web-app-img):0.1
-      resources:
-        inputs:
-          - name: source
-            resource: node-web-app-git
-        outputs:
-          - name: image
-            resource: node-web-app-img
+    - name: fetch-from-git
       taskRef:
-        kind: ClusterTask
-        name: buildah
+        name: git-clone
+      params:
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: git-source
+    - name: build-image
+      taskRef:
+        name: kaniko
+      params:
+        - name: IMAGE
+          value: $(params.image-name)
+        - name: DOCKERFILE
+          value: $(params.path-to-docker-file)
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: argocd-sync-deployment
       params:
         - name: application-name
@@ -46,7 +47,7 @@ spec:
         - name: argocd-version
           value: v1.5.2
       runAfter:
-        - build-and-publish-image
+        - build-image
       taskRef:
         kind: Task
         name: argocd-task-sync-and-wait
