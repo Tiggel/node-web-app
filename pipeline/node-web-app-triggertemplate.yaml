@@ -23,9 +23,9 @@ spec:
           - name: deployment_environment
             value: $(params.environment)
           - name: url
-            value: $(params.url)
+            value: https://github.com/Tiggel/node-web-app.git
           - name: revision
-            value: $(params.revision)
+            value: master
           - name: image
             value: tiggel/node-web-demo:0.1
           - name: path-to-docker-file
