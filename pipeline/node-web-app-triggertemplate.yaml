@@ -29,7 +29,7 @@ spec:
           - name: deployment_environment
             value: $(params.environment)
           - name: git-url
-            value: https://github.com/Tiggel/node-web-app.git
+            value: $(params.git-url)
           - name: git-revision
             value: master
           - name: image-name
