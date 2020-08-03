@@ -25,6 +25,8 @@ spec:
           value: ./Dockerfile
         - name: TLSVERIFY
           value: 'false'
+        - name: IMAGE
+          value: $(node-web-app-img):0.1
       resources:
         inputs:
           - name: source

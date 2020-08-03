@@ -19,5 +19,5 @@ metadata:
 spec:
   params:
     - name: url
-      value: 'tiggel/node-web-demo:latest'
+      value: 'tiggel/node-web-demo'
   type: image
