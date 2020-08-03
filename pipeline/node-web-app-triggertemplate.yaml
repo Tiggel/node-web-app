@@ -21,7 +21,7 @@ spec:
           name: node-web-app-pipeline
         params:
           - name: deployment_environment
-            value: $(params.environment)
+            value: dev
           - name: url
             value: https://github.com/Tiggel/node-web-app.git
           - name: revision
