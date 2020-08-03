@@ -38,6 +38,8 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+      runAfter:
+        - fetch-from-git
     - name: argocd-sync-deployment
       params:
         - name: application-name
