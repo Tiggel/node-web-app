@@ -27,7 +27,7 @@ spec:
                     storage: 1Gi
         params:
           - name: deployment_environment
-            value: dev
+            value: $(params.environment)
           - name: git-url
             value: https://github.com/Tiggel/node-web-app.git
           - name: git-revision
