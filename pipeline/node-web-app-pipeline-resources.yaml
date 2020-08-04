@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: node-web-app-source
+  namespace: node-web-project
+spec:
+  params:
+    - name: url
+      value: 'https://github.com/Tiggel/node-web-app.git'
+    - name: revision
+      value: master
+  type: git
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: node-web-app-image
+  namespace: node-web-project
+spec:
+  params:
+    - name: url
+      value: 'tiggel/node-web-demo'
+  type: image

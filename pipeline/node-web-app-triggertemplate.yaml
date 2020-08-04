@@ -4,16 +4,12 @@ metadata:
   name: node-web-app-tt
 spec:
   params:
-    - name: environment
-      description: argocd app
-    - name: url
-      description: git url
-    - name: revision
-      description: git revision
+    - name: deployment_environment
+      type: string
     - name: commit
-      description: git commit
+      type: string
   resourcetemplates:
-    - apiVersion: tekton.dev/v1beta1
+    - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
       metadata:
         generateName: node-web-app-pipeline-run-
@@ -23,26 +19,17 @@ spec:
           name: node-web-app-pipeline
         params:
           - name: deployment_environment
-            value: dev
-          - name: url
-            value: https://github.com/Tiggel/node-web-app.git
-          - name: revision
-            value: master
-          - name: image
-            value: tiggel/node-web-demo:$(params.commit)
-          - name: path-to-docker-file
-            value: /workspace/source/Dockerfile
+            value: $(params.deployment_environment)
           - name: commit
-            value: $(params.commit)
-        workspaces:
-          - name: git-source # this workspace name must be declared in the Pipeline
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce # access mode may affect how you can use this volume in parallel tasks
-                resources:
-                  requests:
-                    storage: 1Gi
+            value: $params.commit)
+        resources:
+          - name: node-web-app-git
+            resourceRef:
+              name: node-web-app-source
+          - name: node-web-app-img
+            resourceRef:
+              name: node-web-app-image
+        #serviceAccountName: pipeline
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
@@ -50,13 +37,13 @@ metadata:
   name: node-web-app-tb
 spec:
   params:
-    - name: url
+    - name: git-repo-url
       value: https://github.com/Tiggel/node-web-app.git
-    - name: revision
+    - name: git-revision
       value: master
-    - name: commit
-      value: $(body.head_commit.id)
-    - name: environment
+    - name: git-repo-name
+      value: tekton-webinar
+    - name: deployment_environment
       value: dev
 ---
 apiVersion: triggers.tekton.dev/v1alpha1

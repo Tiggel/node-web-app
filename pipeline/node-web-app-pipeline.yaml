@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
   name: node-web-app-pipeline
@@ -8,38 +8,35 @@ metadata:
     component: tekton
 spec:
   params:
-    - name: url
-    - name: revision
-    - name: image
     - name: deployment_environment
-    - name: path-to-docker-file
-  workspaces:
-    - name: git-source
+      description: the environment to deploy to with argocd, which is the argocd application to use
+      default: dev
+    - name: commit
+      default: 0.2
+  resources:
+    - name: node-web-app-git
+      type: git
+    - name: node-web-app-img
+      type: image
   tasks:
-    - name: fetch-from-git
-      taskRef:
-        name: git-clone
+    - name: build-and-publish-image
       params:
-        - name: url
-          value: $(params.url)
-        - name: revision
-          value: $(params.revision)
-      workspaces:
-        - name: output
-          workspace: git-source
-    - name: build-image
-      taskRef:
-        name: kaniko
-      params:
-        - name: IMAGE
-          value: $(params.image)
+        - name: BUILDER_IMAGE
+          value: 'quay.io/buildah/stable:v1.11.0'
         - name: DOCKERFILE
-          value: $(params.path-to-docker-file)
-      workspaces:
-        - name: source
-          workspace: git-source
-      runAfter:
-        - fetch-from-git
+          value: ./Dockerfile
+        - name: TLSVERIFY
+          value: 'false'
+      resources:
+        inputs:
+          - name: source
+            resource: node-web-app-git
+        outputs:
+          - name: image
+            resource: node-web-app-img
+      taskRef:
+        kind: ClusterTask
+        name: buildah
     - name: argocd-sync-deployment
       params:
         - name: application-name
@@ -49,7 +46,7 @@ spec:
         - name: argocd-version
           value: v1.5.2
       runAfter:
-        - build-image
+        - build-and-publish-image
       taskRef:
         kind: Task
         name: argocd-task-sync-and-wait
