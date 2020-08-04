@@ -43,13 +43,6 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
-        resources:
-          - name: node-web-app-git
-            resourceRef:
-              name: node-web-app-source
-          - name: node-web-app-img
-            resourceRef:
-              name: node-web-app-image
         #serviceAccountName: pipeline
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
