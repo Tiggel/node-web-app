@@ -29,7 +29,7 @@ spec:
           - name: revision
             value: master
           - name: image
-            value: tiggel/node-web-demo:0.1
+            value: tiggel/node-web-demo:$(params.commit)
           - name: path-to-docker-file
             value: /workspace/source/Dockerfile
           - name: commit
