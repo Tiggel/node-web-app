@@ -10,6 +10,8 @@ spec:
       description: git url
     - name: revision
       description: git revision
+    - name: commit
+      description: git commit
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -30,6 +32,8 @@ spec:
             value: tiggel/node-web-demo:0.1
           - name: path-to-docker-file
             value: /workspace/source/Dockerfile
+          - name: commit
+            value: $(params.commit)
         workspaces:
           - name: git-source # this workspace name must be declared in the Pipeline
             volumeClaimTemplate:
@@ -50,6 +54,8 @@ spec:
       value: https://github.com/Tiggel/node-web-app.git
     - name: revision
       value: master
+    - name: commit
+      value: $(body.head_commit.id)
     - name: environment
       value: dev
 ---
@@ -61,6 +67,11 @@ spec:
   #serviceAccountName: pipeline
   triggers:
     - name: trigger-argo
+      interceptors:
+        - cel:
+            filter: >-
+              (header.match('X-GitHub-Event', 'push')) &&
+               body.ref.startsWith('refs/heads/master')
       bindings:
         - ref: node-web-app-tb
       template:
