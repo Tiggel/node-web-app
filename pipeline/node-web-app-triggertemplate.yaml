@@ -15,7 +15,7 @@ spec:
     - name: image
     - name: path-to-docker-file
   resourcetemplates:
-    - apiVersion: tekton.dev/v1alpha1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
         generateName: node-web-app-pipeline-run-
