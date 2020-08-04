@@ -25,15 +25,15 @@ spec:
           name: node-web-app-pipeline
         params:
           - name: deployment_environment
-            value: $(params.deployment_environment)
+            value: $(tt.params.deployment_environment)
           - name: url
-            value: $(params.url)
+            value: $(tt.params.url)
           - name: revision
-            value: $(params.revision)
+            value: $(tt.params.revision)
           - name: image
-            value: $(params.image)
+            value: $(tt.params.image)
           - name: path-to-docker-file
-            value: $(params.path-to-docker-file)
+            value: $(tt.params.path-to-docker-file)
         workspaces:
           - name: git-source # this workspace name must be declared in the Pipeline
             volumeClaimTemplate:
