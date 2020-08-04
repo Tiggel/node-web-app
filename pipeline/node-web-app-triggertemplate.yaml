@@ -5,7 +5,7 @@ metadata:
 spec:
   params:
     - name: deployment_environment
-    - name: commit
+    - name: image
   resourcetemplates:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
@@ -18,8 +18,8 @@ spec:
         params:
           - name: deployment_environment
             value: $(params.deployment_environment)
-          - name: commit
-            value: $(params.commit)
+          - name: image
+            value: $(params.image)
         resources:
           - name: node-web-app-git
             resourceRef:
@@ -43,6 +43,8 @@ spec:
       value: tekton-webinar
     - name: deployment_environment
       value: dev
+    - name: image
+      value: tiggel/node-web-demo:$(body.head_commit.id)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener

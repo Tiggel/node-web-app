@@ -11,8 +11,8 @@ spec:
     - name: deployment_environment
       description: the environment to deploy to with argocd, which is the argocd application to use
       default: dev
-    - name: commit
-      default: default
+    - name: image
+      default: tiggel/node-web-demo:latest
   resources:
     - name: node-web-app-git
       type: git
@@ -21,19 +21,20 @@ spec:
   tasks:
     - name: build-and-publish-image
       params:
-        - name: BUILDER_IMAGE
-          value: 'quay.io/buildah/stable:v1.11.0'
         - name: DOCKERFILE
           value: ./Dockerfile
-        - name: TLSVERIFY
-          value: 'false'
       resources:
         inputs:
           - name: source
             resource: node-web-app-git
         outputs:
+          resources:
           - name: image
-            resource: node-web-app-img
+            resourceSpec:
+              type: image
+              params:
+              - name: url
+                value: $(params.image)
       taskRef:
         kind: ClusterTask
         name: buildah
