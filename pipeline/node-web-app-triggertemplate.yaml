@@ -21,7 +21,7 @@ spec:
           - name: deployment_environment
             value: $(params.deployment_environment)
           - name: commit
-            value: $params.commit)
+            value: $(params.commit)
         resources:
           - name: node-web-app-git
             resourceRef:

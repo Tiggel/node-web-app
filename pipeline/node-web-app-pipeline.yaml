@@ -12,7 +12,7 @@ spec:
       description: the environment to deploy to with argocd, which is the argocd application to use
       default: dev
     - name: commit
-      default: 0.2
+      default: default
   resources:
     - name: node-web-app-git
       type: git
