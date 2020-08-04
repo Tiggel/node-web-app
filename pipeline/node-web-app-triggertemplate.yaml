@@ -5,9 +5,7 @@ metadata:
 spec:
   params:
     - name: deployment_environment
-      type: string
     - name: commit
-      type: string
   resourcetemplates:
     - apiVersion: tekton.dev/v1alpha1
       kind: PipelineRun
