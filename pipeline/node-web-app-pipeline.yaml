@@ -77,7 +77,7 @@ spec:
           value: |
             git add .
             git commit -m 'Update deployment image'
-            git push origin master
+            git push
       runAfter:
         - replace-image
     - name: argocd-sync-deployment
