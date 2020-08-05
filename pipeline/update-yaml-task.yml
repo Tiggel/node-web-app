@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: update-image-in-yaml
+spec:
+  params:
+    - name: path
+      type: string
+      description: Path to the manifest to apply
+    - name: yamlPathToImage
+      type: string
+      description: |
+        The path to the image to replace in the yaml manifest (arg to yq)
+    - name: image
+      type: string
+  steps:
+    - name: replace-image
+      image: mikefarah/yq
+      command: ["yq"]
+      args:
+        - "w"
+        - "-i"
+        - "$(params.path)"
+        - "$(params.yamlPathToImage)"
+        - "$(resources.inputs.image.url)"

@@ -45,17 +45,21 @@ spec:
       runAfter:
         - fetch-from-git
     - name: replace-image
-      image: mikefarah/yq
-      command: ["yq"]
-      args:
-        - "w"
-        - "-i"
-        - "$(params.path-to-yaml"
-        - "$(params.path-to-yaml-image)"
-        - "$(params.image)"
+      taskRef:
+        name: update-image-in-yaml
+      params:
+        - name: path
+          value: $(params.path-to-yaml)
+        - name: yamlPathToImage
+          value: $(params.path-to-yaml-image)
+        - name: image
+          value: $(params.image)
+      workspaces:
+        - name: source
+          workspace: git-source
       runAfter:
         - build-image
-    - name: git-cli
+    - name: push-changes-to-git
       taskRef:
         name: git-cli
       workspaces:
@@ -71,7 +75,8 @@ spec:
             git add .
             git commit -m 'Update deployment image'
             git push origin master
-      runAfter: replace-image
+      runAfter:
+        - replace-image
     - name: argocd-sync-deployment
       params:
         - name: application-name
@@ -81,7 +86,7 @@ spec:
         - name: argocd-version
           value: v1.5.2
       runAfter:
-        - build-image
+        - push-changes-to-git
       taskRef:
         kind: Task
         name: argocd-task-sync-and-wait
