@@ -14,10 +14,10 @@ spec:
         version: 1.1.8
     spec:
       containers:
-      - name: node-web-app
-        image: tiggel/node-web-demo:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
+        - name: node-web-app
+          image: tiggel/node-web-demo:eea136da669f80d64099499fa7a15d51244f6f37
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
       imagePullSecrets:
         - name: dockercreds
