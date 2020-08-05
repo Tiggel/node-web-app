@@ -25,4 +25,4 @@ spec:
         - "-i"
         - "$(params.path)"
         - "$(params.yamlPathToImage)"
-        - "$(resources.inputs.image.url)"
+        - "$(params.image)"
