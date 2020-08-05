@@ -75,7 +75,7 @@ spec:
           value: $(params.git-email)
         - name: GIT_SCRIPT
           value: |
-            git add .
+            git add deployment/node-web-app-deployment.yaml
             git commit -m 'Update deployment image'
             git push origin HEAD:master
       runAfter:
