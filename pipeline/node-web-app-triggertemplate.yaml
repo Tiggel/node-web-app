@@ -55,6 +55,8 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+          - name: input
+            emptyDir: {}
         #serviceAccountName: pipeline
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
