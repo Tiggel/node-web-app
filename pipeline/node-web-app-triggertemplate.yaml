@@ -14,6 +14,10 @@ spec:
       description: git commit
     - name: image
     - name: path-to-docker-file
+    - name: path-to-yaml
+    - name: path-to-yaml-image
+    - name: git-user
+    - name: git-email
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -34,6 +38,14 @@ spec:
             value: $(tt.params.image)
           - name: path-to-docker-file
             value: $(tt.params.path-to-docker-file)
+          - name: path-to-yaml
+            value: $(tt.params.path-to-yaml)
+          - name: path-to-yaml-image
+            value: $(tt.params.path-to-yaml-image)
+          - name: git-user
+            value: $(tt.params.git-user)
+          - name: git-email
+            value: $(tt.params.git-email)
         workspaces:
           - name: git-source # this workspace name must be declared in the Pipeline
             volumeClaimTemplate:
@@ -61,6 +73,14 @@ spec:
       value: tiggel/node-web-demo:$(body.head_commit.id)
     - name: path-to-docker-file
       value: /workspace/source/Dockerfile
+    - name: path-to-yaml
+      value: /workspace/source/deployment/node-web-app-deployment.yaml
+    - name: path-to-yaml-image
+      value: spec.template.spec.containers[0].image
+    - name: git-user
+      value: Tiggel
+    - name: git-email
+      value: sebastian.tiggelkamp@gmail.com
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener

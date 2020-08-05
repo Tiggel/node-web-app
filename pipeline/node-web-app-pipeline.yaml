@@ -13,6 +13,10 @@ spec:
     - name: image
     - name: deployment_environment
     - name: path-to-docker-file
+    - name: path-to-yaml
+    - name: path-to-yaml-image
+    - name: git-user
+    - name: git-email
   workspaces:
     - name: git-source
   tasks:
@@ -40,6 +44,34 @@ spec:
           workspace: git-source
       runAfter:
         - fetch-from-git
+    - name: replace-image
+      image: mikefarah/yq
+      command: ["yq"]
+      args:
+        - "w"
+        - "-i"
+        - "$(params.path-to-yaml"
+        - "$(params.path-to-yaml-image)"
+        - "$(params.image)"
+      runAfter:
+        - build-image
+    - name: git-cli
+      taskRef:
+        name: git-cli
+      workspaces:
+        - name: source
+          workspace: git-source
+      params:
+        - name: GIT_USER_NAME
+          value: $(params.git-user)
+        - name: GIT_USER_EMAIL
+          value: $(params.git-email)
+        - name: GIT_SCRIPT
+          value: |
+            git add .
+            git commit -m 'Update deployment image'
+            git push origin master
+      runAfter: replace-image
     - name: argocd-sync-deployment
       params:
         - name: application-name
